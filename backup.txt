@@ -1,0 +1,112 @@
+private int key; 
+    private node[] children; 
+    private node parent; 
+    private int childrenlen;
+    private int LorR;
+    public node(int newKey,node parent) {
+        this.key = newKey;
+        children = new node[2];
+        this.parent = parent;
+        childrenlen = 0;
+    }
+
+    public node getParent() {
+        return this.parent;
+    }
+
+    public void setParent(node parent) {
+        this.parent = parent;
+    }
+
+    public node addChild(node child) {
+        if (child.getKey() > this.key) {
+            if (this.children[1] == null) {
+                child.setParent(this);
+                this.children[1] = child;
+                child.setLorR(1);
+                child.heapify();
+            } else {
+                this.children[1].addChild(child);
+            }
+        } else if (child.getKey() < this.key) {
+            if (this.children[0] == null) {
+                child.setParent(this);
+                this.children[0] = child;
+                child.setLorR(0);
+                child.heapify();
+            } else {
+                this.children[0].addChild(child);
+            }
+        }
+
+        return child;
+    }
+
+    public void setLorR(int pos) {
+        this.LorR = pos; 
+    }
+
+    private node heapify() {
+        if ((this.parent.getKey() > this.key) | (this.parent != null)) {
+            node[] tempChildren = this.parent.getChildren();
+            tempChildren[this.LorR] = this.parent;
+
+            node tempParent = this.parent;
+            this.parent = this.parent.getParent();
+            tempParent.setChildren(this.children);
+            this.children = tempChildren;
+
+            heapify();
+        }
+
+        return this;
+    }
+
+    public int getKey() {
+        return this.key;
+    }
+
+    public void setKey(int key) {
+        this.key = key;
+    }
+
+    public node[] getChildren() {
+        return this.children;
+    }
+
+    public void setChildren(node[] children) {
+        this.children = children;
+    }
+
+
+
+    public void print() {
+        printSelf();
+        if (this.childLeft != null) {
+            this.childLeft.print();
+        }
+        
+        if (this.childRight != null) {
+            this.childRight.print();
+        }
+    }
+
+    public void printSelf() {
+        Console.Write("Me: " + this.val.ToString() + " ");
+        if (this.parent != null) {
+            Console.Write("Parent: " + this.parent.getVal().ToString() + " ");
+        }
+        if (this.childLeft != null) {
+            Console.Write("LeftChild: " + this.childLeft.getVal().ToString() + " ");
+        }
+        if (this.childRight != null ) {
+            Console.Write("RightChild: " + this.childRight.getVal().ToString() + " ");
+        }
+        if (this.siblingLeft != null) {
+            Console.Write("siblingLeft: " + this.siblingLeft.getVal().ToString() + " ");
+        }
+        if (this.siblingRight != null) {
+            Console.Write("siblingRight: " + this.siblingRight.getVal().ToString() + " ");
+        }    
+        Console.WriteLine(" ");
+    }
